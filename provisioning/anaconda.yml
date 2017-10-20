@@ -110,7 +110,6 @@
     - debug: var=pyenv_versions.stdout_lines
 
     - name: check pip packages
-      command: pip list
+      shell: . {{ home }}/.bash_profile && pip list
       register: pip_list
     - debug: var=pip_list.stdout_lines
-

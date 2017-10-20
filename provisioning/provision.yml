@@ -16,3 +16,5 @@
         - vim
         - zsh
 
+    - name: enable GUI
+      apt: name=ubuntu-desktop
