@@ -95,6 +95,7 @@
       with_items:
         - numpy
         - scipy
+        - pandas
         - scikit-learn
         - matplotlib
         - cython
