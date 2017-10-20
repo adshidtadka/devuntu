@@ -2,13 +2,17 @@
 - hosts: all
   become: yes
   user: vagrant
+
   tasks:
     - name: apt-get update
-      apt: name=* state=latest update_cache=yes
-    - name: Install basic packages
-      apt: name={{ item }} state=present
+      apt: update_cache=yes cache_valid_time=3600
+
+    - name: install basic packages
+      apt: name={{ item }}
       with_items:
+        - dstat
         - git
         - nkf
         - vim
         - zsh
+

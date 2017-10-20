@@ -1,0 +1,116 @@
+---
+- hosts: all
+  user: vagrant
+  vars:
+    python_version: anaconda3-5.0.0
+    user: vagrant
+    home: /home/{{ user }}
+    conda_virtualenv: ml_env
+    activate_home: "{{ home }}/.pyenv/versions/{{ python_version }}/envs/{{ conda_virtualenv }}"
+
+  # see also: https://github.com/shiraco/ansible_ipython_machineleaning_bootstrap_conda
+  tasks:
+    - name: install packages for pyenv
+      become: yes
+      apt: name={{ item }}
+      with_items:
+        - git
+        - gcc
+        - make
+        - openssl
+        - build-essential
+        - zlib1g-dev
+        - libbz2-dev
+        - libssl-dev
+        - libreadline-dev
+        - libsqlite3-dev
+        - pkg-config
+        - gfortran
+        - libopenblas-dev
+        - libblas-dev
+        - liblapack-dev
+        - libpng-dev
+        - libjpeg8-dev
+        - libfreetype6
+        - libfreetype6-dev
+        - libsm6
+        - libxrender-dev
+      tags: pyenv
+
+    - name: check pyenv is installed
+      command: test -x {{ home }}/.pyenv/bin/pyenv
+      register: pyenv_existence
+      ignore_errors: yes
+      tags: pyenv
+
+    - name: check .bash_profile is exist
+      stat: path={{ home }}/.bash_profile
+      register: bash_profile_existence
+      tags: pyenv
+
+    - name: set .bash_profile config by copying from file
+      copy: src=../files/bash_profile dest={{ home }}/.bash_profile
+      when: bash_profile_existence.stat.md5 is not defined
+      ignore_errors: yes
+      tags: pyenv
+
+    - name: git clone pyenv , pyenv-virtualenv
+      git:
+        repo: '{{ item.repo }}'
+        dest: '{{ item.dest }}'
+      with_items:
+        - repo: https://github.com/pyenv/pyenv.git
+          dest: ~/.pyenv
+        - repo: https://github.com/pyenv/pyenv-virtualenv.git
+          dest: ~/.pyenv/plugins/pyenv-virtualenv
+      when: pyenv_existence|failed
+      ignore_errors: yes
+      tags: pyenv
+
+    - name: install pyenv's python and rehash
+      shell: . {{ home }}/.bash_profile && pyenv install -s {{ python_version }} && pyenv rehash && pyenv global {{ python_version }}
+      tags: pyenv
+
+    - name: pip install global python pkgs
+      pip: name={{ item }} state=latest executable={{ home }}/.pyenv/shims/pip
+      with_items:
+        - pip
+      tags: global_python
+
+    - name: check conda env dir is exist
+      stat: path={{ activate_home }}
+      register: conda_env_existence
+      tags: conda
+
+    - name: conda create
+      shell: . {{ home }}/.bash_profile && conda create -y -n {{ conda_virtualenv }} anaconda
+      when: conda_env_existence.stat.version is not defined
+      tags: conda
+
+    - name: use new conda virtualenv
+      shell: . {{ home }}/.bash_profile && pyenv global {{ python_version }}/envs/{{ conda_virtualenv }}
+
+    - name: pip install packages
+      pip: name={{ item }} state=latest executable={{ home }}/.pyenv/shims/pip
+      with_items:
+        - numpy
+        - scipy
+        - scikit-learn
+        - matplotlib
+        - cython
+        - ipython
+        - jupyter
+        - tensorflow
+        - keras
+        - chainer
+
+    - name: check pyenv versions
+      shell: . {{ home }}/.bash_profile && pyenv versions
+      register: pyenv_versions
+    - debug: var=pyenv_versions.stdout_lines
+
+    - name: check pip packages
+      command: pip list
+      register: pip_list
+    - debug: var=pip_list.stdout_lines
+
