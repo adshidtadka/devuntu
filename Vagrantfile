@@ -14,8 +14,6 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "bento/ubuntu-16.04"
   config.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/ubuntu-16.04/versions/2.3.0/providers/virtualbox.box"
-  # config.vm.box = "geerlingguy/ubuntu1604"
-  # config.vm.box_url = "https://atlas.hashicorp.com/geerlingguy/boxes/ubuntu1604/versions/1.1.6/providers/virtualbox.box"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
