@@ -1,0 +1,64 @@
+---
+- hosts: all
+  become: yes
+  user: vagrant
+  vars:
+    # The XKB keyboard model name.
+    keyboard_model: jp106
+    # The XKB keyboard layout name.
+    keyboard_layout: jp
+    # The XKB keyboard variant components.
+    keyboard_variant: 'OADG109A'
+    # The XKB keyboard option components.
+    keyboard_options: ''
+    # The behavior of <BackSpace> and <Delete> keys.
+    keyboard_backspace: guess
+
+  # see alse: https://gist.github.com/tokida/b9ea87f7994c45107c429d621c2343d2
+  tasks:
+    - name: install japanese settings
+      apt: name={{ item }} state=latest install_recommends=yes
+      with_items:
+        - git
+        - curl
+        - language-pack-ja-base
+        - language-pack-ja
+        - ibus-mozc
+
+    - name: update locale
+      command: update-locale LANG="ja_JP.UTF-8"
+
+    - name: set localtime
+      file: >
+        src=/usr/share/zoneinfo/Asia/Tokyo
+        dest=/etc/localtime
+        state=link
+        force=yes
+
+    - name: set timezone
+      lineinfile: >
+        dest=/etc/timezone
+        line='Asia/Tokyo'
+
+    - name: install keyboard-configuration
+      apt:
+        name: keyboard-configuration
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: write keyboard configration
+      template:
+        src: keyboards.j2
+        dest: /etc/default/keyboard
+        force: yes
+        owner: root
+        group: root
+        mode: 'u=rw,go=r'
+      notify:
+        - dpkg-reconfigure keyboard-configuration
+
+  handlers:
+    - name: dpkg-reconfigure keyboard-configuration
+      become: yes
+      command: /usr/sbin/dpkg-reconfigure -f noninteractive keyboard-configuration
+      when: ansible_os_family == 'Debian'

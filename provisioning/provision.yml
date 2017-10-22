@@ -7,6 +7,9 @@
     - name: apt-get update
       apt: update_cache=yes cache_valid_time=3600
 
+    - name: enable GUI
+      apt: name=ubuntu-desktop
+
     - name: install user-preferred packages
       apt: name={{ item }}
       with_items:
@@ -15,6 +18,3 @@
         - nkf
         - vim
         - zsh
-
-    - name: enable GUI
-      apt: name=ubuntu-desktop

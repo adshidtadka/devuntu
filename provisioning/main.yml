@@ -1,3 +1,4 @@
 ---
 - import_playbook: provision.yml
+- import_playbook: japanese.yml
 - import_playbook: anaconda.yml
