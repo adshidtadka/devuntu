@@ -17,6 +17,7 @@
         - dstat
         - gcc
         - git
+        - htop
         - nkf
         - tmux
         - vim
