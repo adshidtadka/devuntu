@@ -53,10 +53,7 @@
         owner: root
         group: root
         mode: 'u=rw,go=r'
-      notify:
-        - dpkg-reconfigure keyboard-configuration
 
-  handlers:
     - name: dpkg-reconfigure keyboard-configuration
       become: yes
       command: /usr/sbin/dpkg-reconfigure -f noninteractive keyboard-configuration
