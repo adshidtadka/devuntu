@@ -35,10 +35,9 @@
         state=link
         force=yes
 
-    - name: set timezone
-      lineinfile: >
-        dest=/etc/timezone
-        line='Asia/Tokyo'
+    - name: set timezone to Asia/Tokyo
+      timezone:
+        name: Asia/Tokyo
 
     - name: install keyboard-configuration
       apt:
