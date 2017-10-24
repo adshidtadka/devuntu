@@ -13,8 +13,12 @@
     - name: install user-preferred packages
       apt: name={{ item }}
       with_items:
+        - emacs
         - dstat
+        - gcc
         - git
         - nkf
+        - tmux
         - vim
+        - vim-gnome
         - zsh
