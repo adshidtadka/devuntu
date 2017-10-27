@@ -19,7 +19,7 @@ vagrant plugin install vagrant-vbguest
 vagrant up
 
 # VM 再起動
-vagrant reload
+vagrant reload --provision
 ```
 
 以下のように失敗したっぽくても、 `...ignoring` とついていれば問題ないので無視して大丈夫です。
