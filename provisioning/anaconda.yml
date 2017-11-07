@@ -109,6 +109,7 @@
         - tensorflow
         - keras
         - chainer
+        - tqdm
 
     - name: check pyenv versions
       shell: . {{ home }}/.bash_profile && pyenv versions
