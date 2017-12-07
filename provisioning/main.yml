@@ -1,4 +1,9 @@
 ---
-- import_playbook: provision.yml
-- import_playbook: japanese.yml
-- import_playbook: anaconda.yml
+# - import_playbook: provision.yml
+# - import_playbook: japanese.yml
+# - import_playbook: anaconda.yml
+- hosts: all
+  roles:
+    - pre
+    - japanese
+    - anaconda

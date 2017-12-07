@@ -1,0 +1,10 @@
+# The XKB keyboard model name.
+keyboard_model: jp106
+# The XKB keyboard layout name.
+keyboard_layout: jp
+# The XKB keyboard variant components.
+keyboard_variant: 'OADG109A'
+# The XKB keyboard option components.
+keyboard_options: ''
+# The behavior of <BackSpace> and <Delete> keys.
+keyboard_backspace: guess
