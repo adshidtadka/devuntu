@@ -47,6 +47,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   config.vm.synced_folder "../data", "/vagrant_data", create: true
+  config.vm.synced_folder "../coruscant", "/home/vagrant/IdeaProjects/coruscant", create: true
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -56,7 +57,7 @@ Vagrant.configure("2") do |config|
     # Display the VirtualBox GUI when booting the machine
     vb.gui = true
 
-    vb.name = "project-k_dev"
+    vb.name = "coruscant_dev"
 
     vb.memory = 2048
     vb.cpus = 2
