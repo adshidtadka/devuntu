@@ -79,6 +79,7 @@ Vagrant.configure("2") do |config|
 
   # Ansible provisioner.
   config.vm.provision "ansible_local" do |ansible|
+    ansible.galaxy_role_file = 'provisioning/requirements.yml'
     ansible.playbook = "provisioning/main.yml"
     ansible.inventory_path = "provisioning/inventory"
     ansible.limit = "all"

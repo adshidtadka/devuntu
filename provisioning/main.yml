@@ -1,9 +1,10 @@
 ---
-# - import_playbook: provision.yml
-# - import_playbook: japanese.yml
-# - import_playbook: anaconda.yml
 - hosts: all
   roles:
     - pre
     - japanese
     - anaconda
+    - role: gantsign.java
+      java_license_declaration: 'I accept the "Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX" under the terms at http://www.oracle.com/technetwork/java/javase/terms/license/index.html'
+    - role: gantsign.maven
+    - role: gantsign.intellij
