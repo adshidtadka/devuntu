@@ -1,4 +1,4 @@
-# proect-k 開発環境用 vagrant VM
+# project-k 開発環境用 vagrant VM
 
 ## Installation
 
