@@ -1,4 +1,4 @@
-# project-k 開発環境用 vagrant VM
+# Ubuntu VM for development
 
 ## Installation
 
