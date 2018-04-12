@@ -17,6 +17,7 @@
         - git
         - htop
         - nkf
+        - screenfetch
         - tmux
         - vim
         - vim-gnome
