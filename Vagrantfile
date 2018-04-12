@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "bento/ubuntu-16.04"
-  config.vm.box_url = "https://atlas.hashicorp.com/bento/boxes/ubuntu-16.04/versions/2.3.0/providers/virtualbox.box"
+  config.vm.box_url = "bento/ubuntu-16.04"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -30,7 +30,6 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
   # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port", guest: 8888, host: 8888, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -46,20 +45,26 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "../data", "/vagrant_data", create: true
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
+    vb.name = "bigtree_devuntu"
+
     # Display the VirtualBox GUI when booting the machine
     vb.gui = true
 
-    vb.name = "project-k_dev"
-
     vb.memory = 2048
     vb.cpus = 2
+    vb.customize [
+      "modifyvm", :id,
+      "--vram", "256",
+      "--clipboard", "bidirectional",
+      "--draganddrop", "bidirectional",
+      "--ioapic", "on"
+    ]
 
     # sync time
     vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
@@ -78,6 +83,7 @@ Vagrant.configure("2") do |config|
 
   # Ansible provisioner.
   config.vm.provision "ansible_local" do |ansible|
+    ansible.galaxy_role_file = 'provisioning/requirements.yml'
     ansible.playbook = "provisioning/main.yml"
     ansible.inventory_path = "provisioning/inventory"
     ansible.limit = "all"

@@ -1,16 +1,8 @@
----
-- hosts: all
+- name: anaconda
   become: no
-  user: vagrant
-  vars:
-    python_version: anaconda3-5.0.0
-    user: vagrant
-    home: /home/{{ user }}
-    conda_virtualenv: ml_env
-    activate_home: "{{ home }}/.pyenv/versions/{{ python_version }}/envs/{{ conda_virtualenv }}"
 
   # see also: https://github.com/shiraco/ansible_ipython_machineleaning_bootstrap_conda
-  tasks:
+  block:
     - name: install packages for pyenv
       become: yes
       apt: name={{ item }}
