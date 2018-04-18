@@ -1,0 +1,6 @@
+- name: ctf
+  become: yes
+    - name: install apt packages for ctf
+      apt: name={{ item }}
+      with_items:
+        - gdb

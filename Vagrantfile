@@ -12,8 +12,6 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "bento/ubuntu-16.04"
-  config.vm.box_url = "bento/ubuntu-16.04"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -33,7 +31,6 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -50,24 +47,31 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  config.vm.provider "virtualbox" do |vb|
-    vb.name = "bigtree_devuntu"
+  ["", "-i386"].each do |arch|
+    config.vm.define "devuntu#{arch}" do |node|
+      node.vm.box = "bento/ubuntu-16.04#{arch}"
+      node.vm.network "private_network", ip: "192.168.33.10"
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = "devuntu#{arch}"
 
-    # Display the VirtualBox GUI when booting the machine
-    # vb.gui = true
+        # Display the VirtualBox GUI when booting the machine
+        # vb.gui = true
 
-    vb.memory = 2048
-    vb.cpus = 2
-    vb.customize [
-      "modifyvm", :id,
-      "--vram", "256",
-      "--clipboard", "bidirectional",
-      "--draganddrop", "bidirectional",
-      "--ioapic", "on"
-    ]
+        vb.memory = 2048
+        vb.cpus = 2
+        vb.customize [
+          "modifyvm", :id,
+          "--vram", "256",
+          "--clipboard", "bidirectional",
+          "--draganddrop", "bidirectional",
+          "--ioapic", "on"
+        ]
 
-    # sync time
-    vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
+        # sync time
+        vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
+      end
+    end
+
   end
 
   # View the documentation for the provider you are using for more
