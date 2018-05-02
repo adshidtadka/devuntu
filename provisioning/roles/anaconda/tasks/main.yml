@@ -74,19 +74,6 @@
         - pip
       tags: global_python
 
-    - name: check conda env dir is exist
-      stat: path={{ activate_home }}
-      register: conda_env_existence
-      tags: conda
-
-    - name: conda create
-      shell: . {{ home }}/.bash_profile && conda create -y -n {{ conda_virtualenv }} anaconda
-      when: conda_env_existence.stat.version is not defined
-      tags: conda
-
-    - name: use new conda virtualenv
-      shell: . {{ home }}/.bash_profile && pyenv global {{ python_version }}/envs/{{ conda_virtualenv }}
-
     - name: pip install packages
       pip: name={{ item }} state=latest executable={{ home }}/.pyenv/shims/pip
       with_items:
