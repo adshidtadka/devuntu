@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
         ]
 
         # sync time
-        vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
+        vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000]
       end
     end
 
